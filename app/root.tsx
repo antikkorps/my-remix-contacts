@@ -1,5 +1,5 @@
 import { json, redirect } from "@remix-run/node"
-import type { LinksFunction } from "@remix-run/node"
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node"
 import {
   Form,
   Links,
@@ -24,13 +24,15 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: appStylesHref }]
 }
 
-export const loader = async () => {
-  const contacts = await getContacts()
-  return json({ contacts })
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const url = new URL(request.url)
+  const q = url.searchParams.get("q")
+  const contacts = await getContacts(q)
+  return json({ contacts, q })
 }
 
 export default function App() {
-  const { contacts } = useLoaderData<typeof loader>()
+  const { contacts, q } = useLoaderData<typeof loader>()
   const navigation = useNavigation()
   return (
     <html lang="en">
@@ -46,6 +48,7 @@ export default function App() {
           <div>
             <Form id="search-form" role="search">
               <input
+                defaultValue={q || ""}
                 id="q"
                 aria-label="Search contacts"
                 placeholder="Search"
