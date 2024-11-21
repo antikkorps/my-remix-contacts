@@ -1,9 +1,9 @@
 export default function Index() {
   return (
     <p id="index-page">
-      This is a demo contact for Remix.
+      Il s'agit du projet Tuto de Remix. Le projet n'est pas mobile first
       <br />
-      Check out <a href="https://remix.run">the docs at remix.run</a>.
+      Vous pouvez consulter <a href="https://remix.run">la doc à remix.run</a>.
     </p>
   )
 }
